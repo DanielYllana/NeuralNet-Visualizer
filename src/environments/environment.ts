@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  firebaseAPIKey: 'AIzaSyB9ND6EEluOI_co0iu7U86wabRuvW1KFwQ',
+  firebaseAPIKey: 'API KEY',
   wsEndpoint: 'ws://localhost:8081',
 };
 
