@@ -1,0 +1,85 @@
+<div class="top-control">
+  <div class="control">
+    <button
+      type="button"
+      class="btn btn-control-play"
+      (click)="stopStartTraining(false)"
+      onclick="this.blur();"
+    >
+      <mat-icon style="width: auto" class="icon-lg" *ngIf="!training"
+        >play_circle_filled</mat-icon
+      >
+      <mat-icon style="width: auto" class="icon-lg" *ngIf="training"
+        >pause_circle_filled</mat-icon
+      >
+    </button>
+  </div>
+  <div class="control">
+    <span class="label"> Epoch</span>
+    <span class="label">
+      <b>{{ epoch }} </b></span
+    >
+  </div>
+
+  <div class="control">
+    <span class="label"> Learning Rate</span>
+    <div class="label">
+      <select class="dropdown" (change)="changeLearningRate($event)">
+        <option *ngFor="let lr of model.learning_rates" [ngValue]="lr">
+          {{ lr }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="control">
+    <span class="label"> Batch size: </span>
+    <div class="label">
+      <select class="dropdown" (change)="changeBatchSize($event)">
+        <option value="none" selected disabled hidden>
+          {{ model.batch_size }}
+        </option>
+        <option *ngFor="let bs of model.batch_sizes" [ngValue]="bs">
+          {{ bs }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="control">
+    <span class="label">
+      <button class="btn-control" (click)="getDataset()">Regenerate</button>
+    </span>
+  </div>
+
+  <div class="control">
+    <span class="label">
+      <button class="btn-control" (click)="resetDB()">Reset NN</button>
+    </span>
+  </div>
+</div>
+
+<div class="flex-container" (click)="update()">
+  <div class="item notHid" id="space-left">
+    <p>Something</p>
+  </div>
+  <div class="item InOut" id="space-input">
+    <app-in-layer [model]="model" (changed)="modelUpdated()"></app-in-layer>
+  </div>
+  <div class="item hid" id="space-hidden">
+    <app-hid-layer [model]="model" (changed)="modelUpdated()"></app-hid-layer>
+  </div>
+  <div class="item InOut" id="space-output">
+    <app-out-layer [model]="model" (changed)="modelUpdated()"></app-out-layer>
+  </div>
+  <div class="item notHid">
+    <p>Something</p>
+    <div class="flex-container">
+      <div class="predictionGraph">
+        <canvas id="canvas">{{ chart }}</canvas>
+      </div>
+    </div>
+  </div>
+
+  <svg class="svg-input" id="svg-input"></svg>
+</div>

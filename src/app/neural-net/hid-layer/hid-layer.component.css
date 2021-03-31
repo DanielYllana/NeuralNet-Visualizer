@@ -1,0 +1,8 @@
+.mat-chip-selected {
+  background-color: white;
+  color: var(--color);
+  width: 25px;
+  height: 10px;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,155 @@
+<div class="title" id="title-hidden">
+  <button
+    type="button"
+    class="btn btn-circle btn-sm"
+    (click)="onRemoveLayer()"
+    onclick="this.blur();"
+  >
+    <mat-icon>remove_circle</mat-icon>
+  </button>
+  <button
+    type="submit"
+    class="btn btn-circle btn-sm"
+    (click)="onAddLayer()"
+    onclick="this.blur();"
+  >
+    <mat-icon>add_circle</mat-icon>
+  </button>
+  <a> {{ model.layers.length }} Hidden Layers</a>
+</div>
+
+<div class="flex-container">
+  <ng-container
+    *ngFor="let current_layer of model.layers; let indexOfelement = index"
+  >
+    <div class="layers">
+      <ng-container
+        *ngFor="
+          let neuron of generateArrayOfNumbers(
+            model.layers[indexOfelement].neurons
+          )
+        "
+      >
+        <div
+          class="neurons"
+          *ngIf="neuron <= model.maxDisplayNeurons"
+          id="layer-{{ indexOfelement + 1 }}-neuron-{{ neuron }}"
+        ></div>
+      </ng-container>
+
+      <div class="btn btn-circle btn-sm-placeholder">
+        <mat-icon
+          *ngIf="model.layers[indexOfelement].neurons > model.maxDisplayNeurons"
+          >more_vert</mat-icon
+        >
+        <!--<mat-icon>expand_more</mat-icon>-->
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-circle btn-sm"
+        (click)="open(content, indexOfelement)"
+        onclick="this.blur();"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Edit Hidden Layer {{ layerEdited }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true"> × </span>
+    </button>
+  </div>
+
+  <div class="col-md-12">
+    <div class="group-gap">
+      <div class="d-block my-3">
+        <div class="mb-3">
+          <div class="col-md-12">
+            <div class="group-gap">
+              <div class="d-block my-3">
+                <div class="mb-3">
+                  <select class="custom-select" (change)="changeLayer($event)">
+                    <option value="none" selected disabled hidden>
+                      {{ model.layers[layerEdited].type }}
+                    </option>
+                    <option *ngFor="let type of LayerTypes" [ngValue]="type">
+                      {{ type }}
+                    </option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <select
+                    class="custom-select"
+                    (change)="changeActivation($event)"
+                  >
+                    <option value="none" selected disabled hidden>
+                      {{ model.layers[layerEdited].activation }}
+                    </option>
+                    <option
+                      *ngFor="let activation of Activations"
+                      [ngValue]="activation"
+                    >
+                      {{ activation }}
+                    </option>
+                  </select>
+                </div>
+                <div class="row">
+                  <p>Neurons:</p>
+                  <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    required
+                    min="1"
+                    value="{{ model.layers[layerEdited].neurons }}"
+                    (change)="changeNeurons($event)"
+                  />
+
+                  <ng-container
+                    *ngIf="model.layers[layerEdited].type == 'Dropout'"
+                  >
+                    <p>Dropout:</p>
+                    <input
+                      type="number"
+                      id="amount"
+                      name="amount"
+                      required
+                      max="1"
+                      min="0"
+                      step="0.1"
+                      value="{{ model.layers[layerEdited].dropout }}"
+                      (change)="changeDropout($event)"
+                  /></ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="col-xs-12">
+      <button
+        class="btn btn-success"
+        type="submit"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+</ng-template>
